@@ -1,86 +1,88 @@
 # Sprint 1: Setup & Foundation
 
-**Duración:** Semana 1 (Enero 2-8, 2026)
+**Duración:** Diciembre 30, 2024 - Diciembre 31, 2024
 **Objetivo:** Proyecto configurado profesionalmente y listo para desarrollo activo
-**Horas disponibles:** 14 horas
-**Status:** 🟡 Pending
+**Status:** 🔵 Completado
 
 ---
 
 ## 🎯 Sprint Goal
 
-Tener un proyecto Next.js 15 completamente configurado con Tailwind CSS v4, Supabase, Drizzle ORM, y despliegue automático en Vercel. Al final del sprint, el proyecto debe estar listo para empezar a construir features.
+Tener un proyecto Next.js 16 completamente configurado con Tailwind CSS v4, Supabase, Drizzle ORM, Sentry, y despliegue automático en Vercel con CI/CD. Al final del sprint, el proyecto debe estar listo para empezar a construir features.
 
 ---
 
 ## 📋 Sprint Backlog
 
-### 1. Inicialización del Proyecto (2h)
+### 1. Inicialización del Proyecto ✅
 
 **Tasks:**
-- [ ] Crear proyecto Next.js 15 con TypeScript
-  ```bash
-  npx create-next-app@latest flime --typescript --tailwind --app --src-dir
-  cd flime
-  ```
-- [ ] Configurar `tsconfig.json` con strict mode
-- [ ] Configurar estructura de carpetas:
+- [x] Crear proyecto Next.js 16 con TypeScript
+- [x] Configurar `tsconfig.json` con strict mode
+- [x] Configurar estructura de carpetas:
   ```
   src/
   ├── app/
   ├── components/
+  │   └── ui/
   ├── lib/
+  │   ├── providers/
+  │   ├── supabase/
+  │   ├── utils/
+  │   └── validations/
   ├── db/
+  │   └── schema/
   ├── types/
   └── emails/
   ```
-- [ ] Actualizar README.md con instrucciones de setup
-- [ ] Crear `.env.local.example` con variables necesarias
+- [x] Crear `.env.example` con variables necesarias
+
+**Implementación Real:**
+- Next.js 16.1.1 (no 15 como planeado)
+- TypeScript 5.9.3
+- pnpm 10.26.2 como package manager
+- Proxy pattern (`proxy.ts`) en lugar de middleware (Next.js 16)
 
 **Criterio de aceptación:**
-- ✅ `npm run dev` corre sin errores
+- ✅ `pnpm dev` corre sin errores
 - ✅ TypeScript strict mode habilitado
 - ✅ Estructura de carpetas clara
 
 ---
 
-### 2. Configuración Tailwind CSS v4 (1h)
+### 2. Configuración Tailwind CSS v4 ✅
 
 **Tasks:**
-- [ ] Actualizar a Tailwind CSS v4 (si ya salió estable)
-- [ ] Configurar `tailwind.config.ts`:
-  - Colores personalizados (primary, success, warning, danger)
-  - Espaciado base 8px
-  - Border radius personalizado
-- [ ] Configurar sistema de design tokens
-- [ ] Crear archivo `src/styles/globals.css` con CSS base
-- [ ] Test: Crear componente simple con Tailwind
+- [x] Instalar Tailwind CSS v4.1.18
+- [x] Configurar `@tailwindcss/postcss`
+- [x] Configurar sistema de diseño con CSS variables
+- [x] Test: Componentes renderizando con Tailwind
+
+**Implementación Real:**
+- Tailwind CSS v4.1.18 (stable)
+- @tailwindcss/postcss@4.1.18
+- Configuración en `postcss.config.mjs`
 
 **Criterio de aceptación:**
 - ✅ Tailwind v4 funcionando
-- ✅ Colores personalizados aplicables
 - ✅ HMR funcionando (cambios instantáneos)
 
 ---
 
-### 3. Instalación shadcn/ui (1h)
+### 3. Instalación shadcn/ui ✅
 
 **Tasks:**
-- [ ] Instalar shadcn/ui:
-  ```bash
-  npx shadcn-ui@latest init
-  ```
-- [ ] Agregar componentes iniciales:
-  ```bash
-  npx shadcn-ui@latest add button
-  npx shadcn-ui@latest add input
-  npx shadcn-ui@latest add dialog
-  npx shadcn-ui@latest add select
-  npx shadcn-ui@latest add toast
-  npx shadcn-ui@latest add card
-  ```
-- [ ] Test: Crear página demo con todos los componentes
-- [ ] Configurar Toast provider en layout
+- [x] Instalar shadcn/ui con CLI
+- [x] Agregar componentes iniciales:
+  - Button, Input, Dialog, Select
+  - Toast (Sonner), Card, Badge
+  - Dropdown Menu, Tabs
+- [x] Configurar theme provider
+
+**Implementación Real:**
+- shadcn CLI 3.6.2
+- Componentes instalados: button, input, dialog, select, sonner, card, badge, dropdown-menu, tabs
+- Configuración en `components.json`
 
 **Criterio de aceptación:**
 - ✅ Componentes shadcn/ui disponibles
@@ -89,79 +91,78 @@ Tener un proyecto Next.js 15 completamente configurado con Tailwind CSS v4, Supa
 
 ---
 
-### 4. Configuración Supabase (2h)
+### 4. Configuración Supabase ✅
 
 **Tasks:**
-- [ ] Crear proyecto en Supabase dashboard
-- [ ] Copiar credenciales (URL, anon key, service key)
-- [ ] Instalar dependencias:
-  ```bash
-  npm install @supabase/supabase-js @supabase/auth-helpers-nextjs
-  ```
-- [ ] Crear `src/lib/supabase.ts`:
-  - Cliente para browser
-  - Cliente para server
-- [ ] Configurar variables de entorno:
-  ```
-  NEXT_PUBLIC_SUPABASE_URL=
-  NEXT_PUBLIC_SUPABASE_ANON_KEY=
-  SUPABASE_SERVICE_ROLE_KEY=
-  ```
-- [ ] Test: Query simple a Supabase (verificar conexión)
+- [x] Crear proyecto en Supabase (región São Paulo)
+- [x] Copiar credenciales
+- [x] Instalar `@supabase/ssr` y `@supabase/supabase-js`
+- [x] Crear clientes Supabase:
+  - `src/lib/supabase/client.ts` (browser)
+  - `src/lib/supabase/server.ts` (server)
+  - `src/lib/supabase/proxy.ts` (middleware replacement)
+- [x] Configurar variables de entorno
+- [x] Implementar proxy pattern para Next.js 16
+
+**Implementación Real:**
+- @supabase/ssr v0.8.0
+- @supabase/supabase-js v2.89.0
+- Proxy pattern en lugar de middleware (Next.js 16)
+- Archivo `src/proxy.ts` para manejar sesiones
 
 **Criterio de aceptación:**
 - ✅ Conexión a Supabase funcionando
 - ✅ Clientes configurados correctamente
 - ✅ Variables de entorno seguras
+- ✅ Proxy pattern implementado
 
 ---
 
-### 5. Configuración Drizzle ORM (2h)
+### 5. Configuración Drizzle ORM ✅
 
 **Tasks:**
-- [ ] Instalar dependencias:
-  ```bash
-  npm install drizzle-orm postgres
-  npm install -D drizzle-kit
-  ```
-- [ ] Crear `drizzle.config.ts`
-- [ ] Crear `src/db/schema.ts` con schema inicial:
-  - users table
-  - boards table
-  - tasks table
-  - subscriptions table
-  - notifications table
-- [ ] Crear `src/db/index.ts` (Drizzle client)
-- [ ] Configurar script en `package.json`:
-  ```json
-  "db:generate": "drizzle-kit generate:pg",
-  "db:push": "drizzle-kit push:pg"
-  ```
-- [ ] Generar y aplicar primera migration
+- [x] Instalar drizzle-orm, postgres, drizzle-kit
+- [x] Crear `drizzle.config.ts`
+- [x] Crear schemas en `src/db/schema/`:
+  - users (con preferencias)
+  - tasks (con campos ADHD-friendly)
+  - reminders
+  - tags y task_tags (relación many-to-many)
+  - subscriptions
+  - payments
+- [x] Crear `src/db/index.ts` (Drizzle client)
+- [x] Configurar scripts en `package.json`
+- [x] Aplicar schema con `pnpm db:push`
+
+**Implementación Real:**
+- drizzle-orm v0.45.1
+- drizzle-kit v0.31.8
+- postgres driver v3.4.7
+- 7 tablas creadas (NO boards ni invoices ni notifications)
+- Tasks con campos: status, priority, dueDate, estimatedDuration, actualDuration, isRecurring, recurrencePattern, parentTaskId
 
 **Criterio de aceptación:**
 - ✅ Schema definido en TypeScript
-- ✅ Migrations aplicadas en Supabase
-- ✅ Tablas creadas correctamente
+- ✅ Tablas creadas en Supabase
+- ✅ Database URL con quotes para funcionar correctamente
 
 ---
 
-### 6. Configuración de Database Triggers & RLS (1.5h)
+### 6. Configuración de Database Triggers & RLS ✅
 
 **Tasks:**
-- [ ] Crear SQL script con:
-  - Trigger `update_updated_at` para todas las tablas
-  - Function `check_board_limit` (límite FREE)
-  - Function `check_task_limit` (límite FREE)
-  - Function `set_completed_at` (auto-set al completar tarea)
-- [ ] Aplicar Row Level Security (RLS):
-  - Políticas para users
-  - Políticas para boards
-  - Políticas para tasks
-  - Políticas para subscriptions
-  - Políticas para notifications
-- [ ] Ejecutar script en Supabase SQL Editor
-- [ ] Test: Verificar que RLS funciona correctamente
+- [x] Crear SQL script con triggers `update_updated_at`
+- [x] Crear trigger para sync auth.users con public.users
+- [x] Aplicar Row Level Security (RLS) a todas las tablas
+- [x] Ejecutar scripts en Supabase SQL Editor
+
+**Implementación Real:**
+- Archivo: `src/db/migrations/0001_rls_policies.sql`
+- Archivo: `src/db/migrations/0002_triggers.sql`
+- RLS habilitado en: users, tasks, reminders, tags, task_tags, subscriptions, payments
+- Políticas: usuarios solo ven sus propios datos
+- Trigger de updated_at para todas las tablas
+- Trigger para sync automático con auth.users
 
 **Criterio de aceptación:**
 - ✅ Triggers funcionando
@@ -170,53 +171,44 @@ Tener un proyecto Next.js 15 completamente configurado con Tailwind CSS v4, Supa
 
 ---
 
-### 7. Configuración ESLint & Prettier (0.5h)
+### 7. Configuración ESLint & Prettier ✅
 
 **Tasks:**
-- [ ] Configurar ESLint:
-  ```bash
-  npm install -D eslint-config-next
-  ```
-- [ ] Configurar Prettier:
-  ```bash
-  npm install -D prettier prettier-plugin-tailwindcss
-  ```
-- [ ] Crear `.prettierrc`:
-  ```json
-  {
-    "semi": false,
-    "singleQuote": true,
-    "tabWidth": 2,
-    "plugins": ["prettier-plugin-tailwindcss"]
-  }
-  ```
-- [ ] Agregar scripts en `package.json`:
-  ```json
-  "lint": "next lint",
-  "format": "prettier --write ."
-  ```
+- [x] Configurar ESLint con Next.js
+- [x] Instalar Prettier con plugins
+- [x] Crear `.prettierrc` y `.prettierignore`
+- [x] Agregar scripts de lint y format
+- [x] Resolver conflictos ESLint/Prettier
+
+**Implementación Real:**
+- ESLint flat config (Next.js 16)
+- Prettier 3.7.4
+- eslint-config-prettier y eslint-plugin-prettier
+- Scripts: `lint`, `lint:fix`, `format`, `format:check`, `type-check`
+- Configuración simplificada en `eslint.config.mjs`
 
 **Criterio de aceptación:**
 - ✅ Linter sin errores
 - ✅ Auto-format funcionando
+- ✅ Type-check pasando
 
 ---
 
-### 8. Setup Vercel Deploy (1h)
+### 8. Setup Vercel Deploy ✅
 
 **Tasks:**
-- [ ] Crear repositorio en GitHub
-- [ ] Push código inicial
-- [ ] Conectar repo a Vercel
-- [ ] Configurar environment variables en Vercel:
-  - NEXT_PUBLIC_SUPABASE_URL
-  - NEXT_PUBLIC_SUPABASE_ANON_KEY
-  - SUPABASE_SERVICE_ROLE_KEY
-  - DATABASE_URL
-- [ ] Configurar auto-deploy:
-  - main branch → producción
-  - PRs → preview deployments
-- [ ] Test: Deploy y verificar que funciona
+- [x] Crear repositorio en GitHub
+- [x] Push código inicial
+- [x] Conectar repo a Vercel
+- [x] Configurar environment variables en Vercel
+- [x] Configurar auto-deploy
+- [x] Resolver problemas de deployment
+
+**Implementación Real:**
+- Proyecto: flime-ai.vercel.app
+- Región: São Paulo (gru1)
+- Variables configuradas: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_SENTRY_DSN, SENTRY_AUTH_TOKEN
+- Auto-deploy configurado en main branch
 
 **Criterio de aceptación:**
 - ✅ Deploy exitoso en Vercel
@@ -225,56 +217,48 @@ Tener un proyecto Next.js 15 completamente configurado con Tailwind CSS v4, Supa
 
 ---
 
-### 9. GitHub CI/CD (1h)
+### 9. GitHub CI/CD ✅
 
 **Tasks:**
-- [ ] Crear `.github/workflows/ci.yml`:
-  ```yaml
-  name: CI
-  on: [push, pull_request]
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - uses: actions/setup-node@v3
-          with:
-            node-version: '20'
-        - run: npm ci
-        - run: npm run lint
-        - run: npm run type-check
-        - run: npm run build
-  ```
-- [ ] Agregar script `type-check` en `package.json`:
-  ```json
-  "type-check": "tsc --noEmit"
-  ```
-- [ ] Test: Push y verificar que CI pasa
+- [x] Crear `.github/workflows/ci.yml` (lint, type-check, format-check, build)
+- [x] Crear `.github/workflows/deploy.yml` (production deployment)
+- [x] Crear `.github/workflows/preview.yml` (PR previews)
+- [x] Configurar GitHub Secrets
+- [x] Configurar GitHub Environments (SUPABASE, VERCEL)
+- [x] Test workflows
+
+**Implementación Real:**
+- 3 workflows funcionando
+- Secrets configurados: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, DATABASE_URL, VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID, SENTRY_AUTH_TOKEN, NEXT_PUBLIC_SENTRY_DSN
+- Environments: SUPABASE (para CI build), VERCEL (para deploys)
+- pnpm usado en todos los workflows
 
 **Criterio de aceptación:**
 - ✅ CI corre en cada push
-- ✅ Lint + Type check + Build pasan
-- ✅ GitHub Actions badge verde
+- ✅ Lint + Type check + Format check + Build pasan
+- ✅ Deployment automático funcionando
+- ✅ Preview deployments en PRs
 
 ---
 
-### 10. Configuración de Dependencias Adicionales (1h)
+### 10. Configuración de Dependencias Adicionales ✅
 
 **Tasks:**
-- [ ] Instalar TanStack Query:
-  ```bash
-  npm install @tanstack/react-query
-  ```
-- [ ] Instalar React Hook Form + Zod:
-  ```bash
-  npm install react-hook-form @hookform/resolvers zod
-  ```
-- [ ] Instalar date-fns:
-  ```bash
-  npm install date-fns
-  ```
-- [ ] Crear provider para TanStack Query en layout
-- [ ] Test: Crear ejemplo simple con cada librería
+- [x] Instalar TanStack Query
+- [x] Instalar React Hook Form + Zod
+- [x] Instalar date-fns
+- [x] Crear providers y validaciones
+- [x] Crear utilidades de fecha con locale español
+
+**Implementación Real:**
+- @tanstack/react-query v5.90.16
+- react-hook-form v7.69.0
+- @hookform/resolvers v5.2.2
+- zod v4.2.1
+- date-fns v4.1.0
+- QueryProvider creado en `src/lib/providers/query-provider.tsx`
+- Validaciones en `src/lib/validations/` (auth.ts, task.ts)
+- Utilidades de fecha en `src/lib/utils/date.ts` con locale español
 
 **Criterio de aceptación:**
 - ✅ Todas las dependencias instaladas
@@ -283,153 +267,201 @@ Tener un proyecto Next.js 15 completamente configurado con Tailwind CSS v4, Supa
 
 ---
 
-### 11. Setup Monitoring (1h)
+### 11. Setup Monitoring con Sentry ✅
 
 **Tasks:**
-- [ ] Crear cuenta en Sentry (free tier)
-- [ ] Instalar Sentry:
-  ```bash
-  npx @sentry/wizard@latest -i nextjs
-  ```
-- [ ] Configurar environment en Sentry (development/production)
-- [ ] Test: Forzar error y verificar que llega a Sentry
-- [ ] Crear cuenta en PostHog (analytics)
-- [ ] Configurar PostHog en layout
-- [ ] Test: Verificar que eventos se capturan
+- [x] Crear cuenta en Sentry
+- [x] Instalar @sentry/nextjs
+- [x] Crear archivos de configuración:
+  - `instrumentation.ts` (registro)
+  - `instrumentation-client.ts` (cliente)
+  - `sentry.server.config.ts` (servidor)
+  - `sentry.edge.config.ts` (edge)
+- [x] Configurar Next.js con `withSentryConfig`
+- [x] Crear página de ejemplo y API de test
+- [x] Crear global-error.tsx
+- [x] Configurar source maps
+- [x] Configurar Sentry en CI/CD
+- [x] Test de captura de errores
+
+**Implementación Real:**
+- @sentry/nextjs v10.32.1
+- Organización: daniel-perez-org
+- Proyecto: javascript-nextjs
+- Session Replay habilitado
+- Performance monitoring (tracing)
+- Source maps subiendo automáticamente en builds
+- Página de prueba: /sentry-example-page
+- Archivo `.env.sentry-build-plugin` para auth token
+- Variables en Vercel configuradas
 
 **Criterio de aceptación:**
 - ✅ Sentry capturando errores
-- ✅ PostHog capturando eventos
+- ✅ Source maps funcionando
 - ✅ Dashboards configurados
+- ✅ CI/CD integrando Sentry
+
+**Nota:** PostHog pospuesto para fase posterior
 
 ---
 
 ## 🧪 Testing & Validation
 
 ### Definition of Done (Sprint 1)
-- [ ] `npm run dev` corre sin errores
-- [ ] `npm run build` completa exitosamente
-- [ ] `npm run lint` pasa sin warnings
-- [ ] Deploy en Vercel accesible
-- [ ] Database schema aplicado en Supabase
-- [ ] RLS verificado (usuarios no pueden ver datos de otros)
-- [ ] CI/CD pasando en GitHub Actions
-- [ ] Sentry y PostHog capturando data
+- [x] `pnpm dev` corre sin errores
+- [x] `pnpm build` completa exitosamente
+- [x] `pnpm lint` pasa sin warnings
+- [x] Deploy en Vercel accesible
+- [x] Database schema aplicado en Supabase
+- [x] RLS verificado (usuarios no pueden ver datos de otros)
+- [x] CI/CD pasando en GitHub Actions
+- [x] Sentry capturando errores
 
 ### Manual Testing Checklist
-- [ ] Abrir proyecto en localhost:3000
-- [ ] Verificar Tailwind CSS funcionando (crear un botón de prueba)
-- [ ] Verificar componentes shadcn/ui renderizan
-- [ ] Hacer query a Supabase desde API route
-- [ ] Verificar que Drizzle puede hacer CRUD a DB
-- [ ] Forzar un error y verificar Sentry
-- [ ] Deploy a Vercel y verificar producción
+- [x] Abrir proyecto en localhost:3000
+- [x] Verificar Tailwind CSS funcionando
+- [x] Verificar componentes shadcn/ui renderizan
+- [x] Verificar que Drizzle puede conectarse a DB
+- [x] Forzar un error y verificar Sentry
+- [x] Deploy a Vercel y verificar producción
 
 ---
 
 ## 📊 Sprint Metrics
 
-**Velocity estimada:** 14 horas / 11 tasks = ~1.27h por task
+**Horas estimadas:** 14 horas
+**Horas reales:** ~16 horas (incluyendo troubleshooting)
 
-**Burndown:**
-| Día | Horas restantes |
-|-----|-----------------|
-| Lun | 12h |
-| Mar | 10h |
-| Mié | 8h |
-| Jue | 6h |
-| Vie | 4h |
-| Sáb | 2h |
-| Dom | 0h (Done) |
+**Tasks completados:** 11/11 (100%)
+
+**Cambios vs Plan Original:**
+- ✅ Next.js 16 en lugar de 15 (upgrade de versión)
+- ✅ Proxy pattern en lugar de middleware (cambio de Next.js 16)
+- ✅ 7 tablas en lugar de 6 (sin boards, notifications, invoices - con tags, task_tags, payments)
+- ✅ PostHog pospuesto
+- ✅ pnpm en lugar de npm
 
 ---
 
-## 🚧 Blockers & Dependencies
+## 🚧 Blockers & Resolución
 
-**Posibles blockers:**
-- Supabase downtime (mitigación: usar DB local si es necesario)
-- Tailwind v4 no estable aún (mitigación: usar v3 temporalmente)
-- Issues con Vercel deploy (mitigación: documentación oficial)
+**Blocker 1:** Middleware deprecado en Next.js 16
+- **Solución:** Migrar a proxy.ts pattern
 
-**Dependencias externas:**
-- Cuenta Supabase activa
-- Cuenta Vercel activa
-- Cuenta GitHub activa
+**Blocker 2:** Drizzle no leía .env.local
+- **Solución:** Crear archivo .env adicional
+
+**Blocker 3:** Error circular en tasks schema
+- **Solución:** Remover .references() de parentTaskId
+
+**Blocker 4:** ESLint circular structure con FlatCompat
+- **Solución:** Simplificar config directamente importando eslint-config-next
+
+**Blocker 5:** pnpm version conflict en GitHub Actions
+- **Solución:** Remover version specification, usar packageManager de package.json
+
+**Blocker 6:** Deploy workflow sin acceso a secrets
+- **Solución:** Agregar environment: VERCEL al workflow
+
+**Blocker 7:** Vercel sin variables de Supabase
+- **Solución:** Agregar variables de entorno en Vercel dashboard
 
 ---
 
 ## 🎓 Learning Outcomes
 
-**Al final de Sprint 1 deberías saber:**
-- ✅ Cómo configurar Next.js 15 App Router
-- ✅ Cómo integrar Supabase con Next.js
+**Al final de Sprint 1 aprendimos:**
+- ✅ Cómo configurar Next.js 16 App Router con proxy pattern
+- ✅ Cómo integrar Supabase con Next.js usando @supabase/ssr
 - ✅ Cómo usar Drizzle ORM para schema y migrations
 - ✅ Cómo aplicar Row Level Security en Supabase
-- ✅ Cómo configurar CI/CD con GitHub Actions
-- ✅ Cómo deployar en Vercel
+- ✅ Cómo configurar CI/CD con GitHub Actions y Environments
+- ✅ Cómo deployar en Vercel con variables de entorno
+- ✅ Cómo integrar Sentry para error monitoring
+- ✅ Cómo usar pnpm como package manager
+- ✅ Cómo configurar Tailwind CSS v4 con PostCSS
 
 ---
 
-## 📝 Notes & Observations
+## 📝 Stack Tecnológico Final
 
-**Tips:**
-- Usa `npx` para comandos one-off (shadcn, create-next-app)
-- Commitea frecuentemente (al menos 1 commit por task)
-- Si te trabas > 30 min, busca ayuda (docs, ChatGPT, comunidad)
-- Documenta decisiones importantes en este archivo
+**Frontend:**
+- Next.js 16.1.1 (App Router)
+- React 19.2.3
+- TypeScript 5.9.3
+- Tailwind CSS v4.1.18
 
-**Comandos útiles:**
-```bash
-# Dev
-npm run dev
+**Backend & Database:**
+- Supabase (PostgreSQL 15)
+- Drizzle ORM v0.45.1
+- Row Level Security
+- Database Triggers
 
-# Build
-npm run build
+**Development Tools:**
+- pnpm 10.26.2
+- ESLint 9.39.2
+- Prettier 3.7.4
+- TanStack Query v5.90.16
+- React Hook Form v7.69.0
+- Zod v4.2.1
+- date-fns v4.1.0
 
-# Lint
-npm run lint
+**UI Components:**
+- shadcn/ui v3.6.2
+- Radix UI primitives
+- Lucide React icons
+- Sonner (toasts)
 
-# Type check
-npm run type-check
+**Monitoring & Observability:**
+- Sentry v10.32.1 (Error tracking, Session Replay, Performance)
 
-# Format
-npm run format
-
-# Database
-npm run db:generate
-npm run db:push
-```
+**CI/CD:**
+- GitHub Actions (3 workflows)
+- Vercel (Deployments)
 
 ---
 
 ## 🏁 Sprint Review
 
-**Preguntas para retrospectiva:**
-1. ¿Logramos el sprint goal?
-2. ¿Qué salió bien?
-3. ¿Qué salió mal?
-4. ¿Qué deberíamos hacer diferente en Sprint 2?
-5. ¿Hay tech debt que abordar?
+**¿Logramos el sprint goal?**
+✅ Sí, completamente. El proyecto está configurado profesionalmente y listo para desarrollo de features.
 
-**A completar al final del sprint:**
-- Horas reales trabajadas: ___
-- Tasks completados: ___ / 11
-- Blockers encontrados: ___
-- Aprendizajes clave: ___
+**¿Qué salió bien?**
+- Configuración completa sin tech debt significativo
+- CI/CD funcionando desde día 1
+- Sentry capturando errores correctamente
+- Esquema de base de datos bien diseñado con RLS
+
+**¿Qué salió mal?**
+- Varios blockers por cambios en Next.js 16 (middleware → proxy)
+- Tiempo extra en troubleshooting de CI/CD con environments
+- Problemas con variables de entorno en Vercel
+
+**¿Qué hacer diferente en Sprint 2?**
+- Leer release notes de versiones nuevas antes de usar
+- Configurar variables de entorno desde el inicio
+- Testear CI/CD más temprano en el sprint
+
+**Tech debt:**
+- ❌ No hay tech debt significativo
+- ✅ Código limpio y bien organizado
+- ✅ Todos los workflows pasando
 
 ---
 
 ## ➡️ Next Sprint
 
-**Sprint 2 (Sem 2) - Authentication:**
-- Supabase Auth integration
-- Signup/Login/Logout pages
-- Google OAuth
+**Sprint 2 - Authentication & User Management:**
+- Implementar sistema de autenticación con Supabase Auth
+- Páginas de Signup/Login/Logout
+- Protected routes
 - Onboarding wizard
+- User profile settings
 
 ---
 
-**Sprint Owner:** Fundador Flime
-**Start Date:** Enero 2, 2026
-**End Date:** Enero 8, 2026
-**Status:** 🟡 Pending → 🟢 In Progress → 🔵 Done
+**Sprint Owner:** Daniel Pérez
+**Start Date:** Diciembre 30, 2024
+**End Date:** Diciembre 31, 2024
+**Status:** 🔵 Completado
+**Deploy:** https://flime-ai.vercel.app

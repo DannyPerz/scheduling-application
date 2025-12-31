@@ -1,19 +1,22 @@
 # Flime.ai - MVP Scope Definition
 
-**Versión:** 1.0
-**Fecha:** Diciembre 30, 2024
+**Versión:** 2.0 (Actualizado con Schema Real)
+**Fecha:** Diciembre 31, 2024
 **Timeline:** 10 semanas (14 horas/semana = 140 horas totales)
+**Status Sprint 1:** ✅ Completado
 
 ---
 
 ## 🎯 MVP Objective
 
-**Lanzar una versión funcional de Flime.ai que permita a usuarios:**
-1. Organizarse con tableros y tareas
+**Lanzar una versión funcional de Flime.ai que permita a usuarios con ADHD/ADD:**
+1. Organizarse con tareas y etiquetas (tags)
 2. Recibir recordatorios confiables por email
 3. Pagar por una suscripción Premium si les gusta el producto
 
 **Criterio de éxito:** 10 usuarios beta completan onboarding y crean al menos 5 tareas sin asistencia.
+
+**Cambio importante:** Reemplazamos boards rígidos por **tags flexibles** (mejor UX para ADHD)
 
 ---
 
@@ -22,561 +25,412 @@
 ### 1. Autenticación & Usuarios
 
 #### 1.1 Registro/Login
-- [x] Registro con email + password
-- [x] Login con email + password
-- [x] Verificación de email (código 6 dígitos via Resend)
-- [x] OAuth con Google
-- [x] Logout
-- [x] Password reset (forgot password flow)
+- [ ] Registro con email + password
+- [ ] Login con email + password
+- [ ] Verificación de email (Supabase Auth)
+- [ ] OAuth con Google (Fase 2)
+- [ ] Logout
+- [ ] Password reset (forgot password flow)
 
 #### 1.2 Perfil de Usuario
-- [x] Nombre completo
-- [x] Email (read-only)
-- [x] Avatar (iniciales generadas automáticamente)
-- [x] Zona horaria (auto-detectada, editable)
-- [x] Idioma (Español por default, opción Inglés)
+- [ ] Nombre completo (users.fullName)
+- [ ] Email (read-only)
+- [ ] Avatar (iniciales generadas automáticamente)
+- [ ] Zona horaria (users.timezone - auto-detectada, editable)
+- [ ] Idioma (users.language: es/en, default: es)
 
 #### 1.3 Onboarding (Primera vez)
-- [x] Wizard de 4 pasos:
-  1. Bienvenida
-  2. Crear primer tablero
-  3. Crear primera tarea
-  4. Configurar preferencias de notificación
-- [x] Skip option (ir directo al dashboard)
+- [ ] Wizard de 3 pasos:
+  1. Bienvenida + preferencias básicas
+  2. Crear primera tarea
+  3. Configurar preferencias de notificación
+- [ ] Skip option (ir directo al dashboard)
 
 ---
 
-### 2. Tableros (Boards)
+### 2. Tareas (Tasks) - ADHD-Friendly
 
-#### 2.1 CRUD Tableros
-- [x] **Crear tablero**
-  - Nombre (obligatorio, max 50 chars)
-  - Color (6 opciones predefinidas)
-  - Icono (12 opciones: trabajo, personal, salud, finanzas, etc.)
-  - Descripción (opcional, max 200 chars)
-
-- [x] **Ver tableros**
-  - Lista en sidebar
-  - Grid de cards en vista principal
-  - Contador de tareas por tablero
-
-- [x] **Editar tablero**
-  - Cambiar nombre, color, icono, descripción
-
-- [x] **Eliminar tablero**
-  - Confirmación: "¿Eliminar tablero X con Y tareas?"
-  - Hard delete (MVP - no hay recuperación)
-
-#### 2.2 Límites por Plan
-- [x] **FREE:** Máximo 2 tableros
-- [x] **PREMIUM:** Ilimitado
-- [x] Mensaje cuando se alcanza el límite: "Upgrade para crear más tableros"
-
----
-
-### 3. Tareas (Tasks)
-
-#### 3.1 CRUD Tareas
-- [x] **Crear tarea**
+#### 2.1 CRUD Tareas
+- [ ] **Crear tarea**
   - Título (obligatorio, max 200 chars)
-  - Descripción (opcional, textarea simple, max 1000 chars)
-  - Tablero (select, obligatorio)
+  - Descripción (opcional, max 1000 chars)
   - Fecha de vencimiento (date picker, opcional)
-  - Hora (time picker, opcional)
-  - Prioridad (Alta/Media/Baja, default: Media)
-  - Recordatorio (select: Sin recordatorio, 15min, 30min, 1h, 1 día antes)
+  - Prioridad (Baja/Media/Alta/Urgente, default: Media)
+  - **Estimated Duration** (minutos) - ADHD: time blindness
+  - Tags (opcional, multi-select)
 
-- [x] **Ver tareas**
-  - Vista de lista agrupada por tablero
+- [ ] **Ver tareas**
+  - Vista de lista agrupada por status
   - Vista de calendario (mensual)
-  - Filtros: Estado, Prioridad, Tablero
+  - Filtros: Estado, Prioridad, Tags
   - Ordenar: Fecha, Prioridad, Alfabético
 
-- [x] **Editar tarea**
+- [ ] **Editar tarea**
   - Modal con todos los campos
-  - Guardar cambios
+  - **Actualizar Actual Duration** al completar
 
-- [x] **Completar tarea**
-  - Checkbox → marca como "Done"
+- [ ] **Completar tarea**
+  - Checkbox → marca como "Completed"
   - Animación de celebración (confetti leve)
-  - Mueve a sección "Completadas"
+  - Registra completedAt timestamp
 
-- [x] **Eliminar tarea**
+- [ ] **Eliminar tarea**
   - Confirmación simple
   - Hard delete (MVP)
 
-#### 3.2 Estados de Tarea
-- [x] Todo (pendiente) - default
-- [x] Done (completada)
+#### 2.2 Estados de Tarea
+- [ ] **Pending** (pendiente) - default
+- [ ] **In Progress** (en progreso)
+- [ ] **Completed** (completada)
+- [ ] **Archived** (archivada)
+
+#### 2.3 Campos ADHD-Friendly
+- [ ] **estimatedDuration** - Cuánto crees que tomará (minutos)
+- [ ] **actualDuration** - Cuánto realmente tomó
+- [ ] **parentTaskId** - Soporte para subtareas
+- [ ] **order** - Ordenamiento manual de tareas
+- [ ] **isRecurring** - Tareas recurrentes (Premium)
+- [ ] **recurrencePattern** - RRULE format (Premium)
+
+#### 2.4 Límites por Plan
+- [ ] **FREE:** Máximo 15 tareas activas (pending + in_progress)
+- [ ] **PREMIUM:** Ilimitado
+- [ ] Tareas completadas NO cuentan para el límite
+
+---
+
+### 3. Tags (Etiquetas) - Reemplazo de Boards
+
+**Decisión de diseño:** Tags flexibles en lugar de boards rígidos
+
+#### 3.1 CRUD Tags
+- [ ] **Crear tag**
+  - Nombre (obligatorio, max 30 chars)
+  - Color (selector hex, default: #3b82f6)
+
+- [ ] **Ver tags**
+  - Lista en sidebar
+  - Contador de tareas por tag
+
+- [ ] **Editar tag**
+  - Cambiar nombre y color
+
+- [ ] **Eliminar tag**
+  - Confirmación: "¿Eliminar tag X? Se desasignará de Y tareas"
+  - Las tareas NO se eliminan, solo pierden el tag
+
+#### 3.2 Asignación de Tags a Tareas
+- [ ] Relación many-to-many (tabla `task_tags`)
+- [ ] Una tarea puede tener múltiples tags
+- [ ] Select multi en formulario de tarea
+- [ ] Filtrar tareas por tag en vista principal
+
+#### 3.3 Tags Sugeridos (onboarding)
+- 🏢 Trabajo
+- 🏠 Personal
+- 💪 Salud
+- 📚 Estudio
+- 💰 Finanzas
+
+---
+
+### 4. Recordatorios (Reminders)
+
+#### 4.1 Sistema de Recordatorios
+- [ ] **Crear recordatorio** para una tarea
+  - sendAt (timestamp cuando enviar)
+  - channel (email, web_push, whatsapp, sms)
+  - Enviado automáticamente por cron job
+
+- [ ] **Múltiples recordatorios** por tarea
+  - Ejemplo: 1 día antes + 1 hora antes
+
+- [ ] **Estados:**
+  - sent: false (pendiente)
+  - sent: true (enviado)
+
+#### 4.2 Canales de Alerta (MVP)
+- [ ] **Email** (Resend)
+  - Template limpio, branded
+  - CTA: "Ver tarea" → link directo
+
+- [ ] **Web Push Notifications** (Fase 2)
+  - Solo si usuario tiene sesión abierta
 
 **Out of scope MVP:**
-- ❌ In Progress (Fase 2)
-- ❌ Archived (Fase 2)
+- ❌ WhatsApp (Fase 2)
+- ❌ SMS (Fase 2)
 
-#### 3.3 Límites por Plan
-- [x] **FREE:** Máximo 15 tareas activas (estado: Todo)
-- [x] **PREMIUM:** Ilimitado
-- [x] Tareas completadas NO cuentan para el límite
+#### 4.3 Preferencias de Notificación
+- [ ] Toggle: Email notifications (users.emailNotifications)
+- [ ] Toggle: Web push (users.webPushNotifications)
+- [ ] Daily Summary (users.dailySummary)
+- [ ] Daily Summary Time (users.dailySummaryTime)
 
----
-
-### 4. Calendario
-
-#### 4.1 Vista de Calendario
-- [x] Vista mensual (mes actual)
-- [x] Navegación mes anterior/siguiente
-- [x] Tareas mostradas en día correspondiente
-- [x] Color-coded por tablero
-- [x] Click en día → abrir modal "Crear tarea" con fecha pre-filled
-- [x] Click en tarea → abrir modal "Editar tarea"
-- [x] Indicador de "hoy"
-
-#### 4.2 Responsive
-- [x] Desktop: Grilla completa 7x5
-- [x] Mobile: Vista compacta, scroll horizontal
+#### 4.4 Límites por Plan
+- [ ] **FREE:** Sin límite en recordatorios (MVP)
+- [ ] **PREMIUM:** Recordatorios recurrentes
 
 ---
 
-### 5. Recordatorios & Notificaciones
+### 5. Calendario
 
-#### 5.1 Email Notifications (Resend)
-- [x] Enviar email X minutos/horas antes de la tarea
-- [x] Template HTML branded (logo Flime, colores)
-- [x] Contenido:
-  - Título de la tarea
-  - Descripción (si hay)
-  - Fecha/hora de vencimiento
-  - Tablero
-  - CTA: "Ver tarea" (link directo a la app)
-- [x] Footer: Unsubscribe link + "Flime.ai"
+#### 5.1 Vista de Calendario
+- [ ] Vista mensual (mes actual)
+- [ ] Navegación mes anterior/siguiente
+- [ ] Tareas mostradas en día correspondiente
+- [ ] Color-coded por tag principal
+- [ ] Click en día → crear tarea con fecha pre-filled
+- [ ] Click en tarea → editar tarea
+- [ ] Indicador de "hoy"
 
-#### 5.2 Web Push Notifications
-- [x] Solicitar permiso en onboarding
-- [x] Notificación nativa del navegador
-- [x] Solo si usuario tiene sesión activa
-- [x] Click → abre la app en la tarea
-
-#### 5.3 Preferencias de Notificación
-- [x] **Settings página:**
-  - Toggle: Email notifications (on/off)
-  - Toggle: Web push notifications (on/off)
-  - Resumen diario: Email a las 8am con tareas del día (on/off)
-
-#### 5.4 Límites por Plan
-- [x] **FREE:** Máximo 1 email alert por día (prioriza por urgencia)
-- [x] **PREMIUM:** Ilimitado
+#### 5.2 Responsive
+- [ ] Desktop: Grilla completa 7x5
+- [ ] Mobile: Vista compacta, scroll horizontal
 
 ---
 
 ### 6. Dashboard Principal
 
 #### 6.1 Layout
-**Sidebar (desktop) / Bottom nav (mobile):**
-- [x] Logo Flime + versión
-- [x] Búsqueda de tareas (icono lupa)
-- [x] "Hoy" - tareas con vencimiento hoy
-- [x] "Próximas 7 días"
-- [x] Divider
-- [x] Lista de tableros (click → filtra tareas)
-- [x] Divider
-- [x] "Configuración" (icono engranaje)
-- [x] "Upgrade to Premium" (si FREE plan) - destacado
+**Sidebar:**
+- [ ] Logo Flime
+- [ ] Búsqueda de tareas
+- [ ] "Hoy"
+- [ ] "Próximas 7 días"
+- [ ] Lista de tags
+- [ ] "+ Nuevo tag"
+- [ ] "Configuración"
+- [ ] "Upgrade to Premium" (si FREE)
 
 **Header:**
-- [x] Saludo personalizado: "Buenos días, [Nombre]"
-- [x] Avatar del usuario (top right)
-- [x] Dropdown: Perfil, Configuración, Logout
+- [ ] Saludo: "Buenos días, [Nombre]"
+- [ ] Avatar (dropdown: Perfil, Logout)
 
-**Main Area:**
-- [x] Quick stats (cards):
+**Main:**
+- [ ] Quick stats:
   - Tareas pendientes hoy
-  - Tareas completadas esta semana
-- [x] Vista de tareas (lista por default)
-- [x] Tabs: Lista / Calendario
+  - Tareas completadas semana
+  - Tiempo estimado vs real (ADHD insight)
+- [ ] Tabs: Lista / Calendario
 
-**Floating Action Button (FAB):**
-- [x] Botón "+" flotante (bottom right)
-- [x] Click → Modal "Nueva tarea"
+**FAB:**
+- [ ] Botón "+" → Nueva tarea
 
 #### 6.2 Búsqueda
-- [x] Input en sidebar
-- [x] Buscar por título de tarea
-- [x] Resultados en tiempo real (debounce 300ms)
-- [x] Mostrar tablero de cada resultado
+- [ ] Input en sidebar
+- [ ] Buscar por título
+- [ ] Resultados en tiempo real (debounce 300ms)
 
 ---
 
 ### 7. Freemium & Planes
 
-#### 7.1 Plan FREE (Default)
-**Límites aplicados:**
-- [x] 2 tableros máximo
-- [x] 15 tareas activas
-- [x] 1 email notification por día
-- [x] Sin temas (solo light mode)
-- [x] Sin exportar datos
-
-**Banners de Upgrade:**
-- [x] Banner top en dashboard (dismissable)
-- [x] Modal al alcanzar límite: "Upgrade para desbloquear"
+#### 7.1 Plan FREE
+**Límites:**
+- [ ] 15 tareas activas
+- [ ] Sin recordatorios recurrentes
+- [ ] Sin temas (solo light mode)
+- [ ] Sin exportar datos
 
 #### 7.2 Plan PREMIUM
 **Pricing:**
-- [x] $5 USD/mes
-- [x] $50 USD/año (17% descuento)
+- $5 USD/mes
+- $50 USD/año (17% descuento)
 
 **Beneficios:**
-- [x] Tableros ilimitados
-- [x] Tareas ilimitadas
-- [x] Notificaciones ilimitadas
-- [x] Recordatorios recurrentes (diario, semanal, mensual)
-- [x] Exportar datos (CSV/JSON)
-- [x] Soporte prioritario
-
-#### 7.3 Página de Pricing
-- [x] Comparación FREE vs PREMIUM (tabla)
-- [x] FAQs
-- [x] CTA: "Empezar gratis" / "Upgrade ahora"
+- Tareas ilimitadas
+- Tags ilimitados
+- Recordatorios ilimitados
+- Recordatorios recurrentes
+- Subtareas (parentTaskId)
+- Exportar datos (CSV/JSON)
 
 ---
 
 ### 8. Pagos (Mercado Pago)
 
-#### 8.1 Integración Mercado Pago
-- [x] SDK de Mercado Pago
-- [x] Crear preferencia de pago
-- [x] Checkout modal o redirect
-- [x] Webhooks para confirmar pago
-- [x] Actualizar plan del usuario (FREE → PREMIUM)
+#### 8.1 Integración
+- [ ] SDK Mercado Pago
+- [ ] Crear preferencia de pago
+- [ ] Webhooks
+- [ ] Actualizar users.plan
+- [ ] Crear registro en `payments`
+- [ ] Crear registro en `subscriptions`
 
-#### 8.2 Gestión de Suscripción
-- [x] Página "Mi Plan" en settings:
-  - Plan actual
+#### 8.2 Gestión
+- [ ] Página "Mi Plan":
+  - Plan actual (users.plan)
   - Precio
-  - Próxima fecha de renovación (si anual)
-  - Método de pago
-- [x] Botón "Cancelar suscripción"
-  - Confirmación: "¿Seguro? Volverás a FREE"
-  - No hay reembolsos (política clara)
-- [x] Downgrade: Suscripción activa hasta fin del periodo pagado
+  - Próxima renovación (subscriptions.currentPeriodEnd)
+- [ ] Cancelar suscripción
 
-#### 8.3 Facturas
-- [x] Email con recibo de pago (Resend)
-- [x] Historial de pagos en settings (lista simple)
+#### 8.3 Historial
+- [ ] Lista de pagos (tabla `payments`)
+- [ ] NO facturas formales (Fase 2)
 
 ---
 
-### 9. Configuración & Settings
+### 9. Configuración
 
 #### 9.1 Perfil
-- [x] Editar nombre
-- [x] Cambiar avatar (iniciales, no upload de imagen en MVP)
-- [x] Zona horaria
-- [x] Idioma (Español/Inglés)
+- [ ] Editar nombre
+- [ ] Zona horaria
+- [ ] Idioma (es/en)
 
 #### 9.2 Preferencias
-- [x] Notificaciones (ver sección 5.3)
-- [x] Primer día de la semana (Domingo/Lunes)
-- [x] Tema: Solo Light mode en MVP (Dark mode → Premium Fase 2)
+- [ ] Email notifications
+- [ ] Web push
+- [ ] Daily summary
+- [ ] Week starts on (domingo/lunes)
 
 #### 9.3 Cuenta
-- [x] Plan actual y upgrade
-- [x] Método de pago
-- [x] Historial de facturación
-- [x] Exportar datos (Premium only)
-  - Botón "Exportar todas las tareas (CSV)"
-  - Botón "Exportar todas las tareas (JSON)"
-- [x] Eliminar cuenta
-  - Confirmación seria: "Esto es permanente"
-  - Hard delete after 7 días (período de gracia)
+- [ ] Ver plan y upgrade
+- [ ] Historial de pagos
+- [ ] Exportar datos (Premium)
+- [ ] Eliminar cuenta
 
 ---
 
 ### 10. Responsive & Accesibilidad
 
-#### 10.1 Responsive Design
-- [x] Mobile-first approach
-- [x] Breakpoints: 640px (sm), 768px (md), 1024px (lg)
-- [x] Sidebar → Bottom navigation en mobile
-- [x] Calendario adaptado a pantalla pequeña
-
-#### 10.2 Accesibilidad
-- [x] WCAG AA compliance
-- [x] Keyboard navigation
-- [x] Focus states visibles
-- [x] Alt text en imágenes
-- [x] Labels en inputs
-- [x] ARIA attributes donde necesario
+- [ ] Mobile-first
+- [ ] Breakpoints: 640/768/1024px
+- [ ] WCAG AA compliance
+- [ ] Keyboard navigation
 
 ---
 
 ### 11. Performance
 
-#### 11.1 Métricas Objetivo
-- [x] First Contentful Paint (FCP) < 1.5s
-- [x] Largest Contentful Paint (LCP) < 2.5s
-- [x] Time to Interactive (TTI) < 3s
-- [x] Cumulative Layout Shift (CLS) < 0.1
-- [x] Lighthouse Performance Score > 90
-
-#### 11.2 Optimizaciones
-- [x] Next.js Image optimization
-- [x] Code splitting automático
-- [x] Lazy loading de modales
-- [x] TanStack Query para caching
-- [x] Debounce en búsquedas
+- [ ] LCP < 2.5s
+- [ ] CLS < 0.1
+- [ ] Lighthouse > 90
+- [ ] Image optimization
+- [ ] Code splitting
+- [ ] TanStack Query caching
 
 ---
 
 ### 12. SEO & Marketing
 
-#### 12.1 Landing Page (Temporal con Next.js)
-- [x] Hero section: "Tu cerebro externo. Tu disciplina digital."
-- [x] Features (3 cards)
-- [x] Pricing simple
-- [x] CTA: "Empezar gratis"
-- [x] Footer: Links legales
-
-**Nota:** En Fase 2 se migra a Astro.js
-
-#### 12.2 Meta Tags
-- [x] Title, description optimizados
-- [x] Open Graph tags (Facebook/LinkedIn)
-- [x] Twitter Card
-- [x] Favicon
+- [ ] Landing page
+- [ ] Meta tags optimizados
+- [ ] Open Graph
+- [ ] Favicon
 
 ---
 
-### 13. Legal & Compliance
+### 13. Legal
 
-#### 13.1 Documentos Legales
-- [x] Términos de Servicio (simple, template adaptado)
-- [x] Política de Privacidad (GDPR friendly)
-- [x] Política de Cookies
-
-#### 13.2 GDPR Compliance
-- [x] Cookie consent banner
-- [x] Derecho a exportar datos
-- [x] Derecho a eliminar cuenta
-- [x] No vender datos a terceros (declarar)
+- [ ] Términos de Servicio
+- [ ] Política de Privacidad
+- [ ] Cookie consent
 
 ---
 
-### 14. Testing & QA
+### 14. Testing
 
-#### 14.1 Testing Mínimo
-- [x] Unit tests: Auth flows, CRUD operations
-- [x] Manual testing: Signup → Create task → Complete → Upgrade
-- [x] Cross-browser: Chrome, Firefox, Safari, Edge
-- [x] Mobile testing: iOS Safari, Chrome Android
-- [x] Accessibility audit (Lighthouse)
-
-#### 14.2 Beta Testing
-- [x] 10 usuarios beta (amigos, familia, comunidad TDA)
-- [x] Formulario de feedback
-- [x] Iterar bugs críticos antes de launch público
+- [ ] Manual testing
+- [ ] Cross-browser
+- [ ] Mobile testing
+- [ ] 10 usuarios beta
 
 ---
 
-### 15. Deployment & DevOps
+### 15. Deployment ✅
 
-#### 15.1 Environments
-- [x] **Development:** localhost
-- [x] **Staging:** Vercel preview (cada PR)
-- [x] **Production:** Vercel producción (rama main)
-
-#### 15.2 CI/CD
-- [x] GitHub Actions:
-  - Lint + Type check en cada commit
-  - Tests automáticos
-  - Deploy automático a Vercel
-
-#### 15.3 Monitoring
-- [x] Error tracking: Sentry (free tier)
-- [x] Analytics: PostHog (free tier) o Vercel Analytics
-- [x] Uptime monitoring: UptimeRobot (free tier)
+#### Sprint 1 Completado:
+- [x] Vercel deployment
+- [x] CI/CD (GitHub Actions)
+- [x] Sentry monitoring
+- [x] Database schema (7 tablas)
+- [x] Row Level Security
 
 ---
 
-## ❌ OUT OF SCOPE (Explícitamente NO en MVP)
+## ❌ OUT OF SCOPE
 
-### Fase 2 (Post-MVP)
-- ❌ Integración Google Calendar
-- ❌ Integración Microsoft Calendar
-- ❌ WhatsApp notifications
-- ❌ SMS notifications
-- ❌ Recordatorios recurrentes avanzados (FREE plan)
+### Cambios vs Plan Original
+- ❌ **Boards** → ✅ Tags flexibles
+- ❌ **Notifications log** → reminders.sent
+- ❌ **Invoices table** → payments es suficiente
+
+### Fase 2
+- ❌ Google/MS Calendar
+- ❌ WhatsApp/SMS
+- ❌ Web push
 - ❌ Dark mode
-- ❌ Plan TEAM (workspaces compartidos)
-- ❌ Asignación de tareas a otros usuarios
-- ❌ Comentarios en tareas
-- ❌ Adjuntar archivos a tareas
-- ❌ Subtareas
+- ❌ Plan TEAM
 - ❌ Vista Kanban
-- ❌ Templates de tareas
-- ❌ Etiquetas/tags personalizables
-- ❌ Filtros avanzados
-- ❌ Reportes de productividad
-- ❌ Analytics de uso detallado para usuarios
-- ❌ App móvil nativa (iOS/Android)
-- ❌ Desktop app (Electron)
-- ❌ API pública
-- ❌ Webhooks
-- ❌ Integraciones con Zapier, Make, etc.
-- ❌ Migración desde otras apps (import)
-- ❌ 2FA (autenticación dos factores)
-- ❌ SSO (Single Sign-On)
-- ❌ Custom domains
-- ❌ White-label
-- ❌ Afiliados/referral program
-- ❌ Landing page con Astro.js (temporal con Next.js)
+- ❌ Templates
+- ❌ App móvil
 
 ---
 
-## 📊 Success Metrics (MVP Launch)
+## 📊 Success Metrics
 
-### Objetivos Primeros 3 Meses
-| Métrica | Target |
-|---------|--------|
+| Métrica | Target (3 meses) |
+|---------|------------------|
 | Usuarios registrados | 100 |
-| Usuarios activos (crearon al menos 1 tarea) | 60 |
+| Usuarios activos | 60 |
 | Usuarios premium | 10 |
-| MRR (Monthly Recurring Revenue) | $50 USD |
-| Retention 30 días | 30% |
-| NPS (Net Promoter Score) | 40+ |
-| Bugs críticos reportados | < 5 |
-
-### Definition of Success
-**El MVP es exitoso si:**
-1. 10 usuarios pagan por Premium en los primeros 3 meses
-2. Usuarios completan onboarding sin ayuda
-3. NPS > 40 (usuarios recomendarían Flime)
-4. Cero downtime crítico
-5. Validación del problema: Usuarios usan la app 3+ veces por semana
-
----
-
-## 🚀 Launch Checklist
-
-### 2 Semanas Antes del Launch
-- [ ] Beta testing completado
-- [ ] Bugs críticos resueltos
-- [ ] Mercado Pago en modo producción y probado
-- [ ] Resend configurado con dominio personalizado
-- [ ] Términos de servicio + privacidad publicados
-- [ ] Landing page funcional
-- [ ] Analytics configurado (PostHog/Vercel)
-- [ ] Sentry configurado
-- [ ] Dominio flime.ai apuntando a Vercel
-- [ ] SSL certificado activo
-
-### Launch Day
-- [ ] Deploy a producción
-- [ ] Smoke test completo (signup → pay → use)
-- [ ] Monitoreo activo (errores, performance)
-- [ ] Post redes sociales personales
-- [ ] Post en r/ADHD (Reddit)
-- [ ] Post en comunidades de productividad
-- [ ] Email a beta testers agradeciendo
-
-### Primera Semana Post-Launch
-- [ ] Responder todos los mensajes/feedback
-- [ ] Daily check de analytics
-- [ ] Fix hot fixes si hay bugs
-- [ ] Iterar en onboarding si hay fricción
-- [ ] Documentar learnings
-
----
-
-## 🛠️ Tech Stack Summary
-
-Ver [docs/architecture/tech-stack.md](../architecture/tech-stack.md) para detalles.
-
-**Core:**
-- Next.js 15 (App Router)
-- TypeScript
-- Tailwind CSS v4
-- shadcn/ui
-
-**Backend:**
-- Supabase (PostgreSQL + Auth + Realtime)
-- Drizzle ORM
-
-**Integraciones:**
-- Resend (emails)
-- Mercado Pago (pagos)
-- Vercel (deploy)
+| MRR | $50 USD |
+| Retention 30d | 30% |
+| NPS | 40+ |
 
 ---
 
 ## 📅 Timeline
 
-**Total: 10 semanas**
-
-| Sprint | Semanas | Foco |
-|--------|---------|------|
-| 1-2 | 1-2 | Setup + Auth |
-| 3-4 | 3-4 | Boards + Tasks |
-| 5-6 | 5-6 | Calendar + Notifications |
-| 7-8 | 7-8 | Freemium + Payments |
-| 9-10 | 9-10 | Polish + Testing + Launch |
-
-**Horas totales:** 14h/semana × 10 semanas = **140 horas**
+| Sprint | Semanas | Foco | Status |
+|--------|---------|------|--------|
+| 1 | 1 | Setup & Foundation | ✅ Completado |
+| 2 | 2 | Auth & User Management | 🔄 Siguiente |
+| 3-4 | 3-4 | Tasks & Tags CRUD | 📋 Planificado |
+| 5-6 | 5-6 | Calendar & Reminders | 📋 Planificado |
+| 7-8 | 7-8 | Freemium & Payments | 📋 Planificado |
+| 9-10 | 9-10 | Polish + Launch | 📋 Planificado |
 
 ---
 
-## ✅ Definition of Done (MVP)
+## 🛠️ Database Schema
 
-**El MVP está completo y listo para launch cuando:**
+**7 tablas (Sprint 1 ✅):**
+1. users - Usuarios con preferencias
+2. tasks - Tareas ADHD-friendly
+3. reminders - Recordatorios
+4. tags - Etiquetas
+5. task_tags - Many-to-many
+6. subscriptions - Suscripciones
+7. payments - Historial
 
-1. ✅ **Funcionalidad completa:**
-   - Signup/Login funciona
-   - CRUD de tableros y tareas funciona
-   - Calendario muestra tareas correctamente
-   - Emails se envían correctamente
-   - Límites FREE/PREMIUM se aplican
-   - Pago con Mercado Pago funciona end-to-end
-
-2. ✅ **Calidad:**
-   - Cero bugs críticos (que impidan usar la app)
-   - Lighthouse score > 85
-   - Funciona en Chrome, Firefox, Safari, Edge
-   - Funciona en mobile (iOS/Android browsers)
-   - Accesibilidad básica (keyboard nav, labels)
-
-3. ✅ **Testing:**
-   - 10 usuarios beta completaron onboarding exitosamente
-   - Test de pago real completado (al menos 1 pago recibido)
-   - Cross-browser testing done
-
-4. ✅ **Legal & Compliance:**
-   - Términos de servicio publicados
-   - Política de privacidad publicada
-   - Cookie consent funcionando
-
-5. ✅ **Deploy:**
-   - Producción en Vercel estable
-   - Dominio flime.ai activo
-   - SSL activo
-   - Monitoring configurado
-
-6. ✅ **Marketing básico:**
-   - Landing page funcional
-   - Meta tags optimizados
-   - Al menos 1 canal de adquisición activo (Reddit/redes)
+Ver [database-schema.md](../architecture/database-schema.md)
 
 ---
 
-**Aprobado por:** [Pendiente]
-**Fecha inicio desarrollo:** Enero 2, 2025
-**Fecha target launch:** Marzo 15, 2025
+## ✅ Definition of Done
+
+1. ✅ Funcionalidad completa
+2. ✅ Lighthouse > 85
+3. ✅ Cross-browser tested
+4. ✅ 10 usuarios beta
+5. ✅ Legal docs publicados
+6. ✅ Deploy estable
+
+---
+
+**Aprobado por:** Daniel Pérez
+**Sprint 1:** ✅ Diciembre 31, 2024
+**Target launch:** Marzo 15, 2025
 
 ---
 
 ## Notas Finales
 
-Este MVP es **intencionalmente minimalista**. El objetivo es lanzar rápido, validar el problema, y conseguir usuarios pagos que validen el modelo de negocio.
-
-**Después del MVP**, iteraremos basado en feedback real de usuarios. Las features de Fase 2 (integraciones, WhatsApp, plan Team) solo se construyen si hay demanda validada.
+**Cambio importante:**
+- ❌ NO boards → ✅ **Tags flexibles** (mejor para ADHD)
+- ✅ Campos ADHD-friendly (estimatedDuration, actualDuration)
+- ✅ Soporte subtareas (parentTaskId)
 
 **Mantra:** "Lanza antes de estar listo. Itera basado en feedback."
