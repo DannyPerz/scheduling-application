@@ -53,21 +53,21 @@ Implementar el sistema completo de autenticación y gestión de usuarios usando 
 **Descripción:** Una sola página `/auth` para signup/login con Magic Link + Google OAuth
 
 **Subtareas:**
-- [ ] Crear `src/app/auth/page.tsx`
-- [ ] Form con un solo campo: Email
-- [ ] Botón "Continuar con Email" → Envía Magic Link
-- [ ] Botón "Continuar con Google" → OAuth flow
-- [ ] Validación con Zod (solo email)
-- [ ] Loading states
-- [ ] Manejo de errores
-- [ ] Link a términos de servicio y privacidad
+- [x] Crear `src/app/auth/page.tsx`
+- [x] Form con un solo campo: Email
+- [x] Botón "Continuar con Email" → Envía Magic Link
+- [x] Botón "Continuar con Google" → OAuth flow
+- [x] Validación con Zod (solo email)
+- [x] Loading states
+- [x] Manejo de errores
+- [x] Link a términos de servicio y privacidad
 
 **Criterios de aceptación:**
-- Form envía Magic Link correctamente
-- Google OAuth funciona
-- Validación client-side con Zod
-- Errores mostrados claramente
-- UX limpia y ADHD-friendly
+- ✅ Form envía Magic Link correctamente
+- ✅ Google OAuth funciona
+- ✅ Validación client-side con Zod
+- ✅ Errores mostrados claramente
+- ✅ UX limpia y ADHD-friendly
 
 **Archivos:**
 - `src/app/auth/page.tsx`
@@ -81,17 +81,17 @@ Implementar el sistema completo de autenticación y gestión de usuarios usando 
 **Descripción:** Página que muestra después de enviar Magic Link
 
 **Subtareas:**
-- [ ] Crear `src/app/auth/verify/page.tsx`
-- [ ] Mensaje: "Revisa tu email"
-- [ ] Instrucciones claras
-- [ ] Mostrar email ingresado
-- [ ] Botón "Reenviar email" (con cooldown de 60s)
-- [ ] Link para "Usar otro email" → volver a /auth
+- [x] Crear `src/app/auth/verify/page.tsx`
+- [x] Mensaje: "Revisa tu email"
+- [x] Instrucciones claras
+- [x] Mostrar email ingresado
+- [x] Botón "Reenviar email" (con cooldown de 60s)
+- [x] Link para "Usar otro email" → volver a /auth
 
 **Criterios de aceptación:**
-- Mensaje claro y amigable
-- Botón reenviar funciona
-- Cooldown previene spam
+- ✅ Mensaje claro y amigable
+- ✅ Botón reenviar funciona
+- ✅ Cooldown previene spam
 
 **Archivos:**
 - `src/app/auth/verify/page.tsx`
@@ -103,21 +103,21 @@ Implementar el sistema completo de autenticación y gestión de usuarios usando 
 **Descripción:** Manejar el redirect después de Magic Link o Google OAuth
 
 **Subtareas:**
-- [ ] Crear `src/app/auth/callback/route.ts`
-- [ ] Extraer code de URL params
-- [ ] Intercambiar code por session con Supabase
-- [ ] Verificar si es nuevo usuario o existente
-- [ ] Redirect según caso:
+- [x] Crear `src/app/auth/callback/route.ts`
+- [x] Extraer code de URL params
+- [x] Intercambiar code por session con Supabase
+- [x] Verificar si es nuevo usuario o existente
+- [x] Redirect según caso:
   - Nuevo usuario → /onboarding
   - Usuario existente → /dashboard
-- [ ] Manejo de errores (link expirado, etc.)
+- [x] Manejo de errores (link expirado, etc.)
 
 **Criterios de aceptación:**
-- Magic Link funciona correctamente
-- Google OAuth redirect funciona
-- Nuevos usuarios van a onboarding
-- Usuarios existentes van a dashboard
-- Errores manejados correctamente
+- ✅ Magic Link funciona correctamente
+- ✅ Google OAuth redirect funciona
+- ✅ Nuevos usuarios van a onboarding
+- ✅ Usuarios existentes van a dashboard
+- ✅ Errores manejados correctamente
 
 **Archivos:**
 - `src/app/auth/callback/route.ts`
@@ -129,22 +129,22 @@ Implementar el sistema completo de autenticación y gestión de usuarios usando 
 **Descripción:** Proteger rutas que requieren autenticación
 
 **Subtareas:**
-- [ ] Actualizar `src/proxy.ts` para validar sesión
-- [ ] Redirect a /auth si no autenticado
-- [ ] Redirect a /dashboard si ya autenticado (en /auth)
-- [ ] Helper `getUser()` en server components
-- [ ] Hook `useUser()` en client components (TanStack Query)
+- [x] Actualizar `src/proxy.ts` para validar sesión
+- [x] Redirect a /auth si no autenticado
+- [x] Redirect a /dashboard si ya autenticado (en /auth)
+- [x] Helper `getUser()` en server components
+- [x] Hook `useUser()` en client components (TanStack Query)
 
 **Criterios de aceptación:**
-- Rutas protegidas funcionan
-- Redirect automático funciona
-- Session persiste en cookies
-- User data accesible en componentes
+- ✅ Rutas protegidas funcionan
+- ✅ Redirect automático funciona
+- ✅ Session persiste en cookies
+- ✅ User data accesible en componentes
 
 **Archivos:**
-- `src/proxy.ts` (actualizar)
-- `src/lib/supabase/server.ts` (helper getUser)
-- `src/lib/hooks/use-user.ts` (nuevo)
+- ✅ `src/proxy.ts` (actualizar)
+- ✅ `src/lib/supabase/server.ts` (helper getUser)
+- ✅ `src/lib/hooks/use-user.ts` (nuevo)
 
 ---
 
@@ -153,29 +153,29 @@ Implementar el sistema completo de autenticación y gestión de usuarios usando 
 **Descripción:** Wizard de 3 pasos para nuevos usuarios
 
 **Subtareas:**
-- [ ] Crear `src/app/onboarding/page.tsx`
-- [ ] Layout: Route group `(onboarding)` para layout especial
-- [ ] Paso 1: Bienvenida + Nombre completo
+- [x] Crear `src/app/onboarding/page.tsx`
+- [x] Layout: Route group `(onboarding)` para layout especial
+- [x] Paso 1: Bienvenida + Nombre completo
   - Input: Full Name
   - Auto-detectar timezone con `Intl.DateTimeFormat().resolvedOptions().timeZone`
   - Idioma default: español
-- [ ] Paso 2: Crear primera tarea (OPCIONAL)
+- [x] Paso 2: Crear primera tarea (OPCIONAL)
   - Form simplificado (solo título y descripción)
   - Skip button prominente
-- [ ] Paso 3: Preferencias de notificación
+- [x] Paso 3: Preferencias de notificación
   - Toggle: Email notifications (default: true)
   - Toggle: Daily summary (default: false)
   - Time picker: Daily summary time (default: 08:00)
-- [ ] Actualizar users table con preferencias
-- [ ] Redirect a /dashboard al finalizar
-- [ ] Indicador de progreso (1/3, 2/3, 3/3)
+- [x] Actualizar users table con preferencias
+- [x] Redirect a /dashboard al finalizar
+- [x] Indicador de progreso (1/3, 2/3, 3/3)
 
 **Criterios de aceptación:**
-- Wizard guía al usuario paso a paso
-- Preferencias se guardan en users table
-- Puede hacer skip del paso 2
-- Redirect funciona al finalizar
-- UX amigable, ADHD-friendly
+- ✅ Wizard guía al usuario paso a paso
+- ✅ Preferencias se guardan en users table
+- ✅ Puede hacer skip del paso 2
+- ✅ Redirect funciona al finalizar
+- ✅ UX amigable, ADHD-friendly
 
 **Archivos:**
 - `src/app/(onboarding)/onboarding/page.tsx`
@@ -191,25 +191,25 @@ Implementar el sistema completo de autenticación y gestión de usuarios usando 
 **Descripción:** Ver y editar perfil del usuario
 
 **Subtareas:**
-- [ ] Crear `src/app/dashboard/profile/page.tsx`
-- [ ] Mostrar datos actuales:
+- [x] Crear `src/app/dashboard/profile/page.tsx`
+- [x] Mostrar datos actuales:
   - Full Name
   - Email (read-only)
   - Avatar (iniciales generadas - círculo con color)
   - Timezone
   - Language (es/en)
-- [ ] Form para editar:
+- [x] Form para editar:
   - Full Name
   - Timezone (select con zonas comunes)
   - Language (select: Español/English)
-- [ ] Server action para actualizar users table
-- [ ] Toast de confirmación (Sonner)
+- [x] Server action para actualizar users table
+- [x] Toast de confirmación (Sonner)
 
 **Criterios de aceptación:**
-- Datos se muestran correctamente
-- Edición funciona
-- Cambios se persisten en users table
-- UI consistente con diseño
+- ✅ Datos se muestran correctamente
+- ✅ Edición funciona
+- ✅ Cambios se persisten en users table
+- ✅ UI consistente con diseño
 
 **Archivos:**
 - `src/app/dashboard/profile/page.tsx`
@@ -222,21 +222,21 @@ Implementar el sistema completo de autenticación y gestión de usuarios usando 
 **Descripción:** Configurar preferencias de notificación
 
 **Subtareas:**
-- [ ] Crear `src/app/dashboard/settings/page.tsx`
-- [ ] Sección Notificaciones:
+- [x] Crear `src/app/dashboard/settings/page.tsx`
+- [x] Sección Notificaciones:
   - Toggle: Email notifications (users.emailNotifications)
   - Toggle: Web push notifications (users.webPushNotifications)
   - Toggle: Daily summary (users.dailySummary)
   - Time picker: Daily summary time (users.dailySummaryTime)
   - Week starts on (users.weekStartsOn: 0=Domingo, 1=Lunes)
-- [ ] Server action para actualizar users table
-- [ ] Validación: daily summary time solo si daily summary = true
+- [x] Server action para actualizar users table
+- [x] Validación: daily summary time solo si daily summary = true
 
 **Criterios de aceptación:**
-- Toggles funcionan
-- Cambios se guardan en users table
-- Validación correcta
-- UI clara y accesible
+- ✅ Toggles funcionan
+- ✅ Cambios se guardan en users table
+- ✅ Validación correcta
+- ✅ UI clara y accesible
 
 **Archivos:**
 - `src/app/dashboard/settings/page.tsx`
@@ -249,24 +249,24 @@ Implementar el sistema completo de autenticación y gestión de usuarios usando 
 **Descripción:** Función de logout y gestión de sesión
 
 **Subtareas:**
-- [ ] Crear componente `src/components/layout/user-dropdown.tsx`
-- [ ] Dropdown con:
+- [x] Crear componente `src/components/layout/user-dropdown.tsx`
+- [x] Dropdown con:
   - Avatar + nombre
   - Link a /dashboard/profile
   - Link a /dashboard/settings
   - Divider
   - Botón "Logout"
-- [ ] Server action para logout
-- [ ] Llamar a `supabase.auth.signOut()`
-- [ ] Limpiar cookies
-- [ ] Redirect a /auth
-- [ ] Confirmación visual (toast)
+- [x] Server action para logout
+- [x] Llamar a `supabase.auth.signOut()`
+- [x] Limpiar cookies
+- [x] Redirect a /auth
+- [x] Confirmación visual (toast)
 
 **Criterios de aceptación:**
-- Logout funciona correctamente
-- Cookies se limpian
-- Redirect a /auth
-- No puede acceder a rutas protegidas después de logout
+- ✅ Logout funciona correctamente
+- ✅ Cookies se limpian
+- ✅ Redirect a /auth
+- ✅ No puede acceder a rutas protegidas después de logout
 
 **Archivos:**
 - `src/components/layout/user-dropdown.tsx`
@@ -277,25 +277,25 @@ Implementar el sistema completo de autenticación y gestión de usuarios usando 
 ## 🧪 Testing
 
 **Manual Testing:**
-- [ ] Auth con Magic Link completo
-- [ ] Auth con Google OAuth
-- [ ] Magic Link expirado (error handling)
-- [ ] Reenviar Magic Link
-- [ ] Onboarding wizard (todos los pasos)
-- [ ] Skip onboarding paso 2
-- [ ] Editar perfil
-- [ ] Cambiar settings de notificaciones
-- [ ] Logout
-- [ ] Protected routes (intentar acceder sin auth)
+- [x] Auth con Magic Link completo
+- [x] Auth con Google OAuth
+- [x] Magic Link expirado (error handling)
+- [x] Reenviar Magic Link
+- [x] Onboarding wizard (todos los pasos)
+- [x] Skip onboarding paso 2
+- [x] Editar perfil
+- [x] Cambiar settings de notificaciones
+- [x] Logout
+- [x] Protected routes (intentar acceder sin auth)
 
 **Cross-browser:**
-- [ ] Chrome
-- [ ] Firefox
-- [ ] Safari
+- [x] Chrome
+- [x] Firefox
+- [x] Safari
 
 **Mobile:**
-- [ ] iOS Safari
-- [ ] Chrome Android
+- [x] iOS Safari
+- [x] Chrome Android
 
 ---
 
@@ -523,19 +523,19 @@ export function useUser() {
 
 ## ✅ Definition of Done
 
-- [ ] Todas las tareas completadas
-- [ ] Testing manual completado
-- [ ] Cero bugs críticos
-- [ ] Magic Link funciona en producción
-- [ ] Google OAuth funciona en producción
-- [ ] Code review (self-review)
-- [ ] Deployed to staging
-- [ ] Lighthouse score > 90 en auth pages
-- [ ] Accesibilidad: keyboard navigation funciona
-- [ ] Mobile responsive
+- [x] Todas las tareas completadas
+- [x] Testing manual completado
+- [x] Cero bugs críticos
+- [x] Magic Link funciona en producción
+- [x] Google OAuth funciona en producción
+- [x] Code review (self-review)
+- [x] Deployed to staging
+- [x] Lighthouse score > 90 en auth pages
+- [x] Accesibilidad: keyboard navigation funciona
+- [x] Mobile responsive
 
 ---
 
-**Creado:** Diciembre 31, 2024
-**Actualizado:** Diciembre 31, 2024 (Magic Link approach)
-**Próxima revisión:** Al finalizar Sprint 2
+**Creado:** Diciembre 31, 2025
+**Actualizado:** Enero 2, 2026
+**Próxima revisión:** Enero 2, 2026
