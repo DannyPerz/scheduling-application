@@ -17,89 +17,89 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 
 ## 📋 Tareas
 
-### 1. Dashboard Layout Base (2h)
-
-**Descripción:** Crear el layout principal del dashboard con sidebar, header y área de contenido
+#### 1 Dashboard Layout Base (2h) ✅
 
 **Subtareas:**
-- [ ] Crear `src/app/dashboard/layout.tsx`
+- [x] Crear `src/app/dashboard/layout.tsx`
   - Sidebar izquierda (fija en desktop, drawer en mobile)
   - Header superior con user dropdown
   - Main content area responsiva
-- [ ] Crear `src/components/layout/dashboard-sidebar.tsx`
+- [x] Crear `src/components/layout/dashboard-sidebar.tsx`
   - Logo Flime
   - Search input (placeholder, funcional en tarea 6)
   - Sección "Vistas rápidas"
   - Sección "Tags" (lista dinámica)
   - Footer con links (Settings, Upgrade)
-- [ ] Crear `src/components/layout/dashboard-header.tsx`
+- [x] Crear `src/components/layout/dashboard-header.tsx`
   - Saludo: "Buenos días, [Nombre]"
   - User dropdown (reusar de Sprint 2)
   - Botón mobile menu (hamburger)
-- [ ] Responsive design:
+- [x] Responsive design:
   - Desktop: Sidebar visible siempre
   - Tablet/Mobile: Sidebar como drawer, toggle con botón
-- [ ] Implementar estado de sidebar (open/closed) con Zustand o useState
+- [x] Implementar estado de sidebar (open/closed) con useState
 
 **Criterios de aceptación:**
 - ✅ Layout completo y responsive
 - ✅ Sidebar funcional en mobile (drawer)
 - ✅ Header con user dropdown funcionando
 - ✅ Navegación entre secciones fluida
-- ✅ Consistente con diseño shadcn/ui
+- ✅ Aplicando Coastal Calm palette
 
 **Archivos:**
 - `src/app/dashboard/layout.tsx`
 - `src/components/layout/dashboard-sidebar.tsx`
 - `src/components/layout/dashboard-header.tsx`
-- `src/lib/store/sidebar-store.ts` (opcional, si usas Zustand)
+
 
 ---
 
-### 2. Tags CRUD - Backend (2h)
+### 2. Tags CRUD - Backend (2h) ✅
 
-**Descripción:** API routes para gestión completa de tags
+**Descripción:** Server Actions con Supabase para gestión completa de tags
 
 **Subtareas:**
-- [ ] Crear `src/app/api/tags/route.ts`
-  - **GET** - Listar tags del usuario autenticado
-    - Query: SELECT * FROM tags WHERE user_id = auth.uid() ORDER BY name
-    - Return: Array de tags con contador de tareas
-  - **POST** - Crear nuevo tag
-    - Body: { name, color }
-    - Validación: Zod schema (name: 1-30 chars, color: hex)
-    - Insert en tabla tags
-- [ ] Crear `src/app/api/tags/[id]/route.ts`
-  - **GET** - Obtener tag por ID (con RLS check)
-  - **PUT** - Actualizar tag (name, color)
-  - **DELETE** - Eliminar tag
-    - Lógica: Desasociar de tareas (DELETE FROM task_tags WHERE tag_id = id)
-    - No eliminar tareas asociadas
-- [ ] Crear validaciones en `src/lib/validations/tag.ts`
+- [x] Crear validaciones en `src/lib/validations/tag.ts`
   ```typescript
   export const createTagSchema = z.object({
     name: z.string().min(1).max(30),
     color: z.string().regex(/^#[0-9A-F]{6}$/i),
   })
+  export const updateTagSchema = z.object({
+    name: z.string().min(1).max(30).optional(),
+    color: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
+  })
   ```
-- [ ] Server actions en `src/lib/actions/tags.ts` (alternativa a API routes)
-  - createTag(data: CreateTagInput)
-  - updateTag(id: string, data: UpdateTagInput)
-  - deleteTag(id: string)
-  - getTags()
+- [x] Crear Server Actions en `src/lib/actions/tags.ts`
+  - **getTags()** - Listar tags del usuario autenticado
+    - Query: SELECT * FROM tags WHERE user_id = auth.uid() ORDER BY name
+    - Return: Array de tags
+  - **getTagById(id)** - Obtener tag por ID (con RLS check)
+  - **createTag(data)** - Crear nuevo tag
+    - Body: { name, color }
+    - Validación: Zod schema (name: 1-30 chars, color: hex)
+    - Verificar duplicados (case insensitive)
+    - Insert en tabla tags
+  - **updateTag(id, data)** - Actualizar tag (name, color)
+    - Validación con Zod
+    - Verificar duplicados (case insensitive)
+  - **deleteTag(id)** - Eliminar tag
+    - Lógica: CASCADE automático en task_tags elimina relaciones
+    - No eliminar tareas asociadas
+  - **getTagTaskCount(tagId)** - Contar tareas asociadas a un tag
 
 **Criterios de aceptación:**
-- ✅ API routes funcionando correctamente
+- ✅ Server Actions funcionando correctamente
 - ✅ Validación con Zod
 - ✅ RLS aplicado (usuarios solo ven sus tags)
+- ✅ Validación de nombres duplicados
 - ✅ Errores manejados apropiadamente
 - ✅ TypeScript types correctos
+- ✅ Build exitoso (pnpm build)
 
 **Archivos:**
-- `src/app/api/tags/route.ts`
-- `src/app/api/tags/[id]/route.ts`
-- `src/lib/validations/tag.ts`
-- `src/lib/actions/tags.ts` (opcional)
+- `src/lib/validations/tag.ts` ✅
+- `src/lib/actions/tags.ts` ✅
 
 ---
 
@@ -108,7 +108,7 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 **Descripción:** UI para crear, editar y eliminar tags desde sidebar
 
 **Subtareas:**
-- [ ] Crear `src/components/tags/tag-list.tsx`
+- [x] Crear `src/components/tags/tag-list.tsx`
   - Lista de tags con:
     - Color indicator (círculo o badge)
     - Nombre del tag
@@ -116,21 +116,21 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
     - Botón edit (icono)
   - Click en tag → filtrar tareas por ese tag
   - Botón "+ Nuevo tag" al final de la lista
-- [ ] Crear `src/components/tags/tag-form-dialog.tsx`
+- [x] Crear `src/components/tags/tag-form-dialog.tsx`
   - Modal con React Hook Form + Zod
   - Input: Nombre (max 30 chars)
   - Color picker: 12 colores predefinidos + selector custom
   - Modo: Crear o Editar (mismo componente)
   - Botones: Guardar / Cancelar
-- [ ] Crear `src/components/tags/delete-tag-dialog.tsx`
+- [x] Crear `src/components/tags/delete-tag-dialog.tsx`
   - AlertDialog de confirmación
   - Mensaje: "¿Eliminar tag [nombre]? Se desasignará de X tareas"
   - Botones: Cancelar / Eliminar
-- [ ] Integrar con TanStack Query:
+- [x] Integrar con TanStack Query:
   - useQuery para `getTags()`
   - useMutation para `createTag`, `updateTag`, `deleteTag`
   - Invalidación de cache al mutar
-- [ ] Toast notifications (Sonner):
+- [x] Toast notifications (Sonner):
   - "Tag creado"
   - "Tag actualizado"
   - "Tag eliminado"
@@ -153,31 +153,10 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 
 ### 4. Tasks CRUD - Backend (3h)
 
-**Descripción:** API routes para gestión completa de tareas con campos ADHD-friendly
+**Descripción:** Server Actions con Supabase para gestión completa de tareas con campos ADHD-friendly
 
 **Subtareas:**
-- [ ] Crear `src/app/api/tasks/route.ts`
-  - **GET** - Listar tareas del usuario
-    - Query params: status, priority, tagId, search
-    - Join con task_tags y tags para incluir tags
-    - Order by: dueDate ASC, priority DESC, order ASC
-    - Return: Array de tasks con tags asociados
-  - **POST** - Crear nueva tarea
-    - Body: { title, description, dueDate, priority, estimatedDuration, tagIds[] }
-    - Validación: Zod schema
-    - Verificar límite FREE (15 tareas activas)
-    - Insert en tabla tasks
-    - Insert relaciones en task_tags (si hay tagIds)
-- [ ] Crear `src/app/api/tasks/[id]/route.ts`
-  - **GET** - Obtener tarea por ID (con tags)
-  - **PUT** - Actualizar tarea
-    - Actualizar campos de tasks
-    - Sincronizar task_tags (delete antiguas + insert nuevas)
-  - **PATCH** - Completar/reabrir tarea
-    - Update status, completedAt
-    - Si completando: Pedir actualDuration
-  - **DELETE** - Eliminar tarea (hard delete en MVP)
-- [ ] Crear validaciones en `src/lib/validations/task.ts`
+- [x] Crear validaciones en `src/lib/validations/task.ts`
   ```typescript
   export const createTaskSchema = z.object({
     title: z.string().min(1, 'El título es requerido').max(200),
@@ -188,52 +167,61 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
     tagIds: z.array(z.string().uuid()).optional(),
   })
 
+  export const updateTaskSchema = z.object({
+    title: z.string().min(1).max(200).optional(),
+    description: z.string().max(1000).optional(),
+    dueDate: z.string().datetime().optional(),
+    priority: z.enum(['low', 'medium', 'high', 'urgent']).optional(),
+    estimatedDuration: z.number().int().positive().optional(),
+    tagIds: z.array(z.string().uuid()).optional(),
+  })
+
   export const completeTaskSchema = z.object({
     actualDuration: z.number().int().positive().optional(),
   })
   ```
-- [ ] Server actions en `src/lib/actions/tasks.ts`
-  - getTasks(filters?: TaskFilters)
-  - createTask(data: CreateTaskInput)
-  - updateTask(id: string, data: UpdateTaskInput)
-  - completeTask(id: string, actualDuration?: number)
-  - deleteTask(id: string)
-- [ ] Helper: Validar límite FREE
-  ```typescript
-  async function validateTaskLimit(userId: string, userPlan: string) {
-    if (userPlan !== 'free') return true
-
-    const { count } = await db
-      .select({ count: sql`count(*)` })
-      .from(tasks)
-      .where(
-        and(
-          eq(tasks.userId, userId),
-          or(
-            eq(tasks.status, 'pending'),
-            eq(tasks.status, 'in_progress')
-          )
-        )
-      )
-
-    if (count >= 15) {
-      throw new Error('Límite de 15 tareas activas alcanzado. Upgradea a Premium.')
-    }
-  }
-  ```
+- [x] Crear Server Actions en `src/lib/actions/tasks.ts`
+  - **getTasks(filters?)** - Listar tareas del usuario
+    - Filtros opcionales: status, priority, tagId, search
+    - Join con task_tags y tags para incluir tags
+    - Order by: dueDate ASC, priority DESC
+    - Return: Array de tasks con tags asociados
+  - **getTaskById(id)** - Obtener tarea por ID (con tags, con RLS check)
+  - **createTask(data)** - Crear nueva tarea
+    - Body: { title, description, dueDate, priority, estimatedDuration, tagIds[x] }
+    - Validación: Zod schema
+    - Verificar límite FREE (15 tareas activas)
+    - Insert en tabla tasks
+    - Insert relaciones en task_tags (si hay tagIds)
+  - **updateTask(id, data)** - Actualizar tarea
+    - Validación con Zod
+    - Actualizar campos de tasks
+    - Sincronizar task_tags (delete antiguas + insert nuevas)
+  - **completeTask(id, actualDuration?)** - Completar tarea
+    - Update status = 'completed', completedAt = now()
+    - Update actualDuration si se proporciona
+  - **reopenTask(id)** - Reabrir tarea completada
+    - Update status = 'pending', completedAt = null
+  - **deleteTask(id)** - Eliminar tarea (hard delete en MVP)
+    - CASCADE automático en task_tags elimina relaciones
+- [x] Crear helper `src/lib/utils/task-limits.ts`
+  - **validateTaskLimit(userId)** - Validar límite FREE
+    - Si plan !== 'free' → return true
+    - Contar tareas con status IN ('pending', 'in_progress')
+    - Si count >= 15 → throw error con código 'LIMIT_REACHED'
 
 **Criterios de aceptación:**
-- ✅ CRUD completo de tareas funcionando
+- ✅ Server Actions funcionando correctamente
 - ✅ Relación many-to-many con tags funciona
 - ✅ Validación con Zod correcta
 - ✅ Límite FREE aplicado (15 tareas activas)
 - ✅ RLS aplicado correctamente
 - ✅ Campos ADHD-friendly (estimatedDuration, actualDuration) funcionando
 - ✅ Errores manejados apropiadamente
+- ✅ TypeScript types correctos
+- ✅ Build exitoso
 
 **Archivos:**
-- `src/app/api/tasks/route.ts`
-- `src/app/api/tasks/[id]/route.ts`
 - `src/lib/validations/task.ts`
 - `src/lib/actions/tasks.ts`
 - `src/lib/utils/task-limits.ts`
@@ -245,7 +233,7 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 **Descripción:** UI para crear, editar, completar y eliminar tareas
 
 **Subtareas:**
-- [ ] Crear `src/components/tasks/task-form-dialog.tsx`
+- [x] Crear `src/components/tasks/task-form-dialog.tsx`
   - Modal grande con React Hook Form + Zod
   - Campos:
     - **Título** (input text, obligatorio, max 200 chars)
@@ -257,7 +245,7 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
   - Modo: Crear o Editar (mismo componente)
   - Botones: Guardar / Cancelar
   - Loading state al guardar
-- [ ] Crear `src/components/tasks/task-list.tsx`
+- [x] Crear `src/components/tasks/task-list.tsx`
   - Lista de tareas agrupadas por status:
     - **Pending** (por hacer)
     - **In Progress** (en progreso)
@@ -273,7 +261,7 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
     - Editar
     - Eliminar
     - Mover a In Progress / Pending
-- [ ] Crear `src/components/tasks/task-complete-dialog.tsx`
+- [x] Crear `src/components/tasks/task-complete-dialog.tsx`
   - Dialog al completar tarea
   - Mensaje: "¡Tarea completada! 🎉"
   - Input opcional: "¿Cuánto tiempo tomó? (minutos)"
@@ -281,20 +269,20 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
     - "Estimaste 30 min, tomó 45 min"
   - Botones: Confirmar / Cancelar
   - Confetti animation (opcional, con react-confetti o canvas-confetti)
-- [ ] Crear `src/components/tasks/delete-task-dialog.tsx`
+- [x] Crear `src/components/tasks/delete-task-dialog.tsx`
   - AlertDialog de confirmación
   - Mensaje: "¿Eliminar tarea '[título]'?"
   - Warning: "Esta acción no se puede deshacer"
   - Botones: Cancelar / Eliminar
-- [ ] Integrar con TanStack Query:
+- [x] Integrar con TanStack Query:
   - useQuery: `getTasks(filters)`
   - useMutation: `createTask`, `updateTask`, `completeTask`, `deleteTask`
   - Optimistic updates para mejor UX
   - Cache invalidation
-- [ ] FAB (Floating Action Button):
+- [x] FAB (Floating Action Button):
   - Botón "+" fixed bottom-right
   - Click → abrir task-form-dialog en modo crear
-- [ ] Empty states:
+- [x] Empty states:
   - Sin tareas: Ilustración + "Crea tu primera tarea"
   - Sin tareas en filtro: "No hay tareas [filtro]"
 
@@ -304,7 +292,7 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 - ✅ Completar tarea funciona (con actualDuration opcional)
 - ✅ Eliminar tarea funciona con confirmación
 - ✅ Lista de tareas se muestra correctamente
-- ✅ Tags multi-select funciona
+-  Tags multi-select funciona
 - ✅ UI responsive y accesible
 - ✅ Loading states y error handling
 - ✅ Animación de confetti al completar (opcional pero deseable)
@@ -325,26 +313,26 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 **Descripción:** Sistema de filtrado y búsqueda de tareas
 
 **Subtareas:**
-- [ ] Implementar búsqueda en sidebar:
+- [x] Implementar búsqueda en sidebar:
   - Input con debounce (300ms)
   - Buscar por tasks.title (case insensitive)
   - Mostrar resultados en tiempo real
   - Clear button
-- [ ] Crear `src/components/tasks/task-filters.tsx`
+- [x] Crear `src/components/tasks/task-filters.tsx`
   - Filtros disponibles:
     - **Status:** Todos / Pending / In Progress / Completed
     - **Priority:** Todas / Baja / Media / Alta / Urgente
     - **Tag:** Todos / [tag específico]
   - UI: Tabs o Select (dependiendo del espacio)
-  - State management: URL params o Zustand
-- [ ] Vistas rápidas en sidebar:
+  - State management: URL params o Zustand (preferible url params)
+- [x] Vistas rápidas en sidebar:
   - **Hoy:** tasks.dueDate = today
   - **Próximos 7 días:** tasks.dueDate <= today + 7 days
   - Click → aplicar filtro automáticamente
-- [ ] Integrar filtros con API:
+- [x] Integrar filtros con API:
   - Pasar filters a getTasks(filters)
   - Backend aplica WHERE clauses según filtros
-- [ ] Indicador visual de filtros activos:
+- [x] Indicador visual de filtros activos:
   - Badge con número de filtros
   - Botón "Limpiar filtros"
 
@@ -359,7 +347,8 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 **Archivos:**
 - `src/components/tasks/task-filters.tsx`
 - `src/components/tasks/task-search.tsx`
-- `src/lib/hooks/use-task-filters.ts`
+- `src/lib/hooks/mutations/use-task-filters.ts`
+- `src/lib/hooks/queries/use-task-filters.ts`
 
 ---
 
@@ -368,22 +357,22 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 **Descripción:** Aplicar límites de plan FREE y mostrar CTAs de upgrade
 
 **Subtareas:**
-- [ ] Validación en backend:
+- [x] Validación en backend:
   - Verificar plan del usuario antes de crear tarea
   - Si FREE y >= 15 tareas activas → error 403
   - Error message: "Has alcanzado el límite de 15 tareas activas. Upgradea a Premium para tareas ilimitadas."
-- [ ] UI: Mostrar límite alcanzado:
+- [x] UI: Mostrar límite alcanzado:
   - Dialog al intentar crear tarea (#16):
     - Mensaje: "Límite alcanzado"
     - Explicación: "Plan FREE: 15 tareas activas. Tienes 15/15."
     - CTA: "Upgrade to Premium" → redirect a /pricing
     - Sugerencia: "Completa o archiva tareas existentes"
   - Botón "Cancelar" → cerrar dialog
-- [ ] Indicador de límite en UI:
+- [x] Indicador de límite en UI:
   - Badge en sidebar: "15/15 tareas" (FREE)
   - Progress bar visual (opcional)
   - Color: Verde (< 10), Amarillo (10-14), Rojo (15)
-- [ ] Banner de upgrade (dismissable):
+- [x] Banner de upgrade (dismissable):
   - Mostrar si user.plan = 'free' y tiene >= 10 tareas
   - Mensaje: "¿Te estás quedando sin espacio? Upgradea a Premium para tareas ilimitadas."
   - Botón "Upgrade" → /pricing
@@ -409,7 +398,7 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 **Descripción:** Widgets con estadísticas rápidas en dashboard
 
 **Subtareas:**
-- [ ] Crear `src/components/dashboard/quick-stats.tsx`
+- [x] Crear `src/components/dashboard/quick-stats.tsx`
   - Grid de 3 cards (responsive: 1 col mobile, 3 cols desktop)
   - **Card 1:** Tareas pendientes hoy
     - Número grande
@@ -425,10 +414,11 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
     - Accuracy: "70% accurate"
     - Mensaje motivacional si mejora
   - Si no hay datos: Placeholder con mensaje educativo
-- [ ] API: Calcular stats en backend o frontend (según performance)
-  - Opción 1: Endpoint GET /api/stats (backend agrega queries)
-  - Opción 2: Calcular en frontend con datos de getTasks()
-- [ ] Responsive design:
+- [x] Calcular stats:
+  - Opción: Calcular en frontend con datos de getTasks()
+  - Usar `src/lib/utils/stats.ts` para cálculos
+  - No requiere Server Action adicional (usar getTasks existente)
+- [x] Responsive design:
   - Mobile: Stack vertical
   - Desktop: Grid horizontal
 
@@ -441,7 +431,6 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 
 **Archivos:**
 - `src/components/dashboard/quick-stats.tsx`
-- `src/app/api/stats/route.ts` (opcional)
 - `src/lib/utils/stats.ts` (cálculos)
 
 ---
@@ -567,212 +556,6 @@ Implementar el sistema completo de gestión de tags y tareas con campos ADHD-fri
 
 ---
 
-## 📝 Notas Técnicas
-
-### Relación Many-to-Many (task_tags)
-
-**Schema ya implementado:**
-```typescript
-// src/db/schema/task-tags.ts
-export const taskTags = pgTable(
-  'task_tags',
-  {
-    taskId: uuid('task_id')
-      .notNull()
-      .references(() => tasks.id, { onDelete: 'cascade' }),
-    tagId: uuid('tag_id')
-      .notNull()
-      .references(() => tags.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at', { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-  },
-  (table) => ({
-    pk: primaryKey({ columns: [table.taskId, table.tagId] }),
-  })
-)
-```
-
-**Query con tags (Drizzle):**
-```typescript
-// Obtener tarea con sus tags
-const taskWithTags = await db.query.tasks.findFirst({
-  where: eq(tasks.id, taskId),
-  with: {
-    taskTags: {
-      with: {
-        tag: true,
-      },
-    },
-  },
-})
-
-// Retorno:
-// {
-//   id: '...',
-//   title: 'Mi tarea',
-//   taskTags: [
-//     { tag: { id: '...', name: 'Trabajo', color: '#3b82f6' } },
-//     { tag: { id: '...', name: 'Urgente', color: '#ef4444' } }
-//   ]
-// }
-```
-
-**Actualizar tags de una tarea:**
-```typescript
-async function updateTaskTags(taskId: string, tagIds: string[]) {
-  await db.transaction(async (tx) => {
-    // 1. Eliminar tags antiguas
-    await tx.delete(taskTags).where(eq(taskTags.taskId, taskId))
-
-    // 2. Insertar tags nuevas
-    if (tagIds.length > 0) {
-      await tx.insert(taskTags).values(
-        tagIds.map(tagId => ({ taskId, tagId }))
-      )
-    }
-  })
-}
-```
-
-### Validación de Límite FREE
-
-```typescript
-// src/lib/utils/plan-limits.ts
-import { db } from '@/db'
-import { tasks, users } from '@/db/schema'
-import { and, eq, or, sql } from 'drizzle-orm'
-
-export async function validateTaskLimit(userId: string) {
-  // 1. Obtener plan del usuario
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, userId),
-    columns: { plan: true },
-  })
-
-  // Premium = sin límites
-  if (user?.plan !== 'free') return true
-
-  // 2. Contar tareas activas (pending + in_progress)
-  const result = await db
-    .select({ count: sql<number>`count(*)::int` })
-    .from(tasks)
-    .where(
-      and(
-        eq(tasks.userId, userId),
-        or(
-          eq(tasks.status, 'pending'),
-          eq(tasks.status, 'in_progress')
-        )
-      )
-    )
-
-  const activeTasksCount = result[0]?.count ?? 0
-
-  if (activeTasksCount >= 15) {
-    throw new Error('LIMIT_REACHED')
-  }
-
-  return true
-}
-```
-
-### ADHD Insight Calculation
-
-```typescript
-// src/lib/utils/stats.ts
-interface Task {
-  estimatedDuration?: number
-  actualDuration?: number
-  completedAt?: Date
-}
-
-export function calculateADHDInsight(tasks: Task[]) {
-  // Filtrar tareas completadas esta semana con durations
-  const oneWeekAgo = new Date()
-  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
-
-  const completedThisWeek = tasks.filter(
-    (task) =>
-      task.completedAt &&
-      task.completedAt >= oneWeekAgo &&
-      task.estimatedDuration &&
-      task.actualDuration
-  )
-
-  if (completedThisWeek.length === 0) {
-    return null // No hay datos
-  }
-
-  const totalEstimated = completedThisWeek.reduce(
-    (sum, task) => sum + (task.estimatedDuration ?? 0),
-    0
-  )
-  const totalActual = completedThisWeek.reduce(
-    (sum, task) => sum + (task.actualDuration ?? 0),
-    0
-  )
-
-  const accuracy = totalEstimated > 0
-    ? Math.round((Math.min(totalEstimated, totalActual) / Math.max(totalEstimated, totalActual)) * 100)
-    : 0
-
-  return {
-    estimatedHours: (totalEstimated / 60).toFixed(1),
-    actualHours: (totalActual / 60).toFixed(1),
-    accuracy,
-    message: getInsightMessage(accuracy),
-  }
-}
-
-function getInsightMessage(accuracy: number): string {
-  if (accuracy >= 90) return '¡Excelente! Estás estimando muy bien 🎉'
-  if (accuracy >= 70) return '¡Bien! Estás mejorando en tus estimaciones'
-  if (accuracy >= 50) return 'Vas bien, sigue practicando'
-  return 'Las estimaciones mejoran con práctica 💪'
-}
-```
-
-### Filtros con URL Params (Opcional)
-
-```typescript
-// src/lib/hooks/use-task-filters.ts
-'use client'
-
-import { useSearchParams, usePathname, useRouter } from 'next/navigation'
-
-export function useTaskFilters() {
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const router = useRouter()
-
-  const filters = {
-    status: searchParams.get('status') || 'all',
-    priority: searchParams.get('priority') || 'all',
-    tagId: searchParams.get('tag') || 'all',
-    search: searchParams.get('search') || '',
-  }
-
-  const setFilter = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-
-    if (value === 'all' || value === '') {
-      params.delete(key)
-    } else {
-      params.set(key, value)
-    }
-
-    router.push(`${pathname}?${params.toString()}`)
-  }
-
-  const clearFilters = () => {
-    router.push(pathname)
-  }
-
-  return { filters, setFilter, clearFilters }
-}
-```
-
 ---
 
 ## 🎨 UI/UX Considerations
@@ -841,7 +624,8 @@ export function useTaskFilters() {
 
 ## 🔗 Referencias
 
-- [Drizzle Relations](https://orm.drizzle.team/docs/rls)
+- [Supabase JavaScript Client](https://supabase.com/docs/reference/javascript/introduction)
+- [Supabase Joins and Nested Tables](https://supabase.com/docs/guides/api/joins-and-nested-tables)
 - [shadcn/ui Date Picker](https://ui.shadcn.com/docs/components/date-picker)
 - [TanStack Query Mutations](https://tanstack.com/query/latest/docs/react/guides/mutations)
 - [React Hook Form](https://www.react-hook-form.com/)
@@ -869,4 +653,4 @@ export function useTaskFilters() {
 
 **Creado:** Enero 2, 2026
 **Actualizado:** Enero 2, 2026
-**Próxima revisión:** Enero 9, 2026
+**Próxima revisión:** Enero 11, 2026

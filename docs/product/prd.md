@@ -1,7 +1,7 @@
 # Flime.ai - Product Requirements Document (PRD)
 
 **Versión:** 2.0 (Actualizado con Schema Real)
-**Fecha:** Diciembre 31, 2024
+**Fecha:** Diciembre 31, 2025
 **Owner:** Daniel Pérez
 **Status:** ✅ Sprint 1 Completado
 
@@ -428,12 +428,15 @@ CREATE TABLE task_tags (
 5. **Fast feedback** - Animaciones < 200ms
 
 ### Visual Style
-- **Tipografía:** Inter (sans-serif moderna)
+- **Tipografía:** Geist Vercel (fuente moderna y limpia)
 - **Colores:**
-  - Azul: #3B82F6 (primary)
-  - Verde: #10B981 (success/completed)
-  - Amarillo: #F59E0B (warning/high priority)
-  - Rojo: #EF4444 (urgent)
+   /* Coastal Calm Palette - ADHD-Friendly Colors */
+    --primary: 210 70% 58%; /* #4A90E2 - Soft Blue (calming, focus) */
+    --secondary: 169 54% 65%; /* #7DD3C0 - Sage Mint (tranquility, growth) */
+    --accent: 42 89% 58%; /* #F7B731 - Warm Yellow (positivity, energy) */
+    --success: 139 63% 62%; /* #6BCF7F - Soft Green */
+    --warning: 26 85% 69%; /* #F39C6B - Soft Orange */
+    --danger: 353 76% 63%; /* #E85D75 - Soft Red */
 - **Componentes:** shadcn/ui (Radix UI primitives)
 
 ---
